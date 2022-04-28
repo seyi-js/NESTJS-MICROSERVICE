@@ -8,6 +8,8 @@ services:
       - "5672:5672"
   micro-server:
     build: ./micro-server
+    ports:
+      - "3001:3001"
     volumes:
       - ./micro-server:/micro-server
     depends_on:
