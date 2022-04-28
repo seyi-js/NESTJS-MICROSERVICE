@@ -1,0 +1,29 @@
+version: "3"
+services:
+  myrabbitmq:
+    image: "rabbitmq:3-management"
+    hostname: my-rabbit
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+  micro-server:
+    build: ./micro-server
+    volumes:
+      - ./micro-server:/micro-server
+    depends_on:
+      - myrabbitmq
+    environment:
+      - RABBITMQ_HOST=myrabbitmq
+    restart: on-failure
+  micro-client:
+    build: ./micro-client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./micro-client:/micro-client
+    depends_on:
+      - myrabbitmq
+    environment:
+      - RABBITMQ_HOST=myrabbitmq
+
+    restart: on-failure
